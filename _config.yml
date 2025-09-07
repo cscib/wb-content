@@ -1,0 +1,4 @@
+# _config.yml
+title: WB Content Feed
+description: A feed for social media content ideas.
+theme: jekyll-theme-minimal # This is a simple, built-in theme
