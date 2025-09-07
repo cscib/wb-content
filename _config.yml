@@ -1,4 +1,12 @@
 # _config.yml
 title: WB Content Feed
 description: A feed for social media content ideas.
-theme: jekyll-theme-minimal # This is a simple, built-in theme
+theme: jekyll-theme-minimal
+
+# These settings are often crucial for plugins to work
+plugins:
+  - jekyll-feed  # This is the plugin that generates feed.xml
+
+# Allow all plugins for GitHub Pages (optional but safe)
+include:
+  - _pages
