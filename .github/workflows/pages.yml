@@ -1,0 +1,40 @@
+name: Deploy GitHub Pages with RSS
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # This crucial step generates an RSS feed from your markdown files
+      - name: Generate RSS Feed
+        uses: goffrederick/rss-generator@v1.0.0
+        with:
+          input_folder: '/'
+          output_file: 'feed.xml'
+          site_url: 'https://<YOUR_GITHUB_USERNAME>.github.io/<YOUR_REPOSITORY_NAME>/'
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v2
