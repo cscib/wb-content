@@ -1,8 +1,8 @@
-name: Deploy GitHub Pages with RSS
+name: Generate and Deploy RSS Feed
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   workflow_dispatch:
 
 permissions:
@@ -10,24 +10,25 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # This crucial step generates an RSS feed from your markdown files
-      - name: Generate RSS Feed
-        uses: goffrederick/rss-generator@v1.0.0
+      # Step 1: Generate the RSS feed using the dvrss tool
+      - name: Generate RSS feed
+        uses: devopsvector/dvrss@master
         with:
-          input_folder: '/'
-          output_file: 'feed.xml'
-          site_url: 'https://cscib.github.io/wb-content/'
+          input: '.'          # The directory containing your .md files
+          output: 'feed.xml'  # The name of the output RSS file
 
+      # Step 2: List files (optional, for debugging)
+      - name: List files in directory
+        run: ls -la
+
+      # The rest of the steps deploy the feed to GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
